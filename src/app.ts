@@ -1,0 +1,35 @@
+import path from "path";
+import express, { Request, Response, NextFunction } from "express";
+const app = express();
+import cookieParser from "cookie-parser";
+import compression from "compression";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+
+import api from "./api";
+
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+};
+app.use(cors());
+app.use(helmet({ crossOriginResourcePolicy: false }));
+app.use(cookieParser());
+app.use(compression());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../", "public")));
+
+app.use(`/api/${process.env.API_VERSION}`, api);
+
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
+    res.status(404).end();
+});
+
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    res.status(500).json({ message: err.message });
+});
+
+export default app;
