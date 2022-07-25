@@ -1,36 +1,35 @@
 import dotenv from "dotenv";
-
-// handle uncaught exceptions
-process.on("uncaughtException", (err: Error) => {
-    console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-    console.log(err.name, err.stack);
-    process.exit(1);
-});
-
-// configure dotenv so Node.js knows where to look
 dotenv.config({ path: "./.config.env" });
-
-// import express app
 import app from "./app";
-
-// declare the port variable
+import sampledb from "./models";
 const PORT = process.env.PORT || 8000;
 
-// set up the express server
+sampledb.authenticate()
+    .then(() => console.log(`Connected to ${sampledb.config.database} successfully`))
+    .catch((err) => console.log(`Unable to connect ${sampledb.config.database}:`, err.message))
+
+sampledb.sync({ force: false })
+    .then(() => console.log(`Synced to ${sampledb.config.database} successfully`))
+    .catch((err) => console.log(`Unable to sync ${sampledb.config.database}:`, err.message))
+
 const server = app.listen(PORT, () => {
-    console.log(`Server is awake on port ${PORT}:${process.env.NODE_ENV}`);
+    console.log(`Server is awake onn port ${PORT}:${process.env.NODE_ENV}`);
 });
 
-// handle unhandled rejections
-process.on('unhandledRejection', (err: Error) => {
+process.on('unhandledRejection', (reason: Error, promise: Promise<any>) => {
     console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-    console.log(err.name);
+    console.log(reason.name, reason.message, reason.stack);
     server.close(() => {
         process.exit(1);
     });
 });
 
-// ensure graceful shutdown in case sigterm received
+process.on("uncaughtException", (err: Error) => {
+    console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+    console.log(err.name, err.message, err.stack);
+    process.exit(1);
+});
+
 process.on('SIGTERM', () => {
     console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
     server.close(() => {

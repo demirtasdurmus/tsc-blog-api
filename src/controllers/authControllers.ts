@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import catchAsync from '../utils/catchAsync';
 
 
-export const register: RequestHandler = catchAsync((req, res, next) => {
+export const register: RequestHandler = catchAsync(async (req, res, next) => {
 
 });
 
