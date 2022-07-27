@@ -1,16 +1,16 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "./.config.env" });
 import app from "./app";
-import sampledb from "./models";
+import db from "./models";
 const PORT = process.env.PORT || 8000;
 
-sampledb.authenticate()
-    .then(() => console.log(`Connected to ${sampledb.config.database} successfully`))
-    .catch((err) => console.log(`Unable to connect ${sampledb.config.database}:`, err.message))
+db.authenticate()
+    .then(() => console.log(`Connected to ${db.config.database} successfully`))
+    .catch((err) => console.log(`Unable to connect ${db.config.database}:`, err.message))
 
-sampledb.sync({ force: false })
-    .then(() => console.log(`Synced to ${sampledb.config.database} successfully`))
-    .catch((err) => console.log(`Unable to sync ${sampledb.config.database}:`, err.message))
+db.sync({ force: true })
+    .then(() => console.log(`Synced to ${db.config.database} successfully`))
+    .catch((err) => console.log(`Unable to sync ${db.config.database}:`, err))
 
 const server = app.listen(PORT, () => {
     console.log(`Server is awake onn port ${PORT}:${process.env.NODE_ENV}`);
@@ -27,11 +27,21 @@ process.on('unhandledRejection', (reason: Error, promise: Promise<any>) => {
 process.on("uncaughtException", (err: Error) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message, err.stack);
+    db.close()
     process.exit(1);
 });
 
 process.on('SIGTERM', () => {
     console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+    db.close()
+    server.close(() => {
+        console.log('💥 Process terminated!');
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('👋 SIGINT RECEIVED. Shutting down gracefully');
+    db.close()
     server.close(() => {
         console.log('💥 Process terminated!');
     });

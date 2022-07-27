@@ -6,3 +6,6 @@
 
 # env
 /.config.env
+
+#config
+.vscode
