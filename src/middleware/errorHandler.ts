@@ -1,7 +1,8 @@
+import { Server } from "http"
 import httpStatus from 'http-status'
 import { Request, Response, NextFunction } from 'express'
 import AppError from '../utils/appError'
-import { ValidationError, Error, ValidationErrorItem } from "sequelize"
+import { Sequelize, ValidationError, Error, ValidationErrorItem } from "sequelize"
 import { JsonWebTokenError, TokenExpiredError, NotBeforeError } from "jsonwebtoken"
 
 enum ErrorStatus { Fail, Error }
@@ -89,6 +90,44 @@ export default class ErrorHandler {
         // pass the error to the actual error handler middleware
         next(error);
     };
+
+    static initializeUncaughtException = () => {
+        process.on("uncaughtException", (err: Error) => {
+            console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+            console.log(err.name, err.message, err.stack);
+            process.exit(1);
+        });
+    }
+
+    static initializeUnhandledRejection = (server: Server) => {
+        process.on('unhandledRejection', (reason: Error, promise: Promise<any>) => {
+            console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+            console.log(reason.name, reason.message, reason.stack);
+            server.close(() => {
+                process.exit(1);
+            });
+        });
+    }
+
+    static initializeSIGTERMlistener = (server: Server, db: Sequelize) => {
+        process.on('SIGTERM', () => {
+            console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+            db.close()
+            server.close(() => {
+                console.log('💥 Process terminated!');
+            });
+        })
+    }
+
+    static initializeSIGINTlistener = (server: Server, db: Sequelize) => {
+        process.on('SIGINT', () => {
+            console.log('👋 SIGINT RECEIVED. Shutting down gracefully');
+            db.close()
+            server.close(() => {
+                console.log('💥 Process terminated!');
+            });
+        });
+    }
 
     private static sendErrorDev = (err: AppError, res: Response) => {
         // 1) log error to console

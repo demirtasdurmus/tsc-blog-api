@@ -1,9 +1,7 @@
 import { RequestHandler } from 'express';
 import catchAsync from '../utils/catchAsync';
-import db from "../models";
-const { User } = db.models
+import { User } from "../models/db";
 
-console.log("----", User)
 export const register: RequestHandler = catchAsync(async (req, res, next) => {
 
 });

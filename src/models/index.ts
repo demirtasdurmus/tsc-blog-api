@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize';
 
 const db = new Sequelize({
     dialect: 'postgres',
