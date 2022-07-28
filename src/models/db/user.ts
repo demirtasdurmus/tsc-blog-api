@@ -3,7 +3,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequ
 import db from "../index";
 import AppError from "../../utils/appError";
 
-interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
+export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
     firstName: string;
     lastName: string;
     bio: string;
