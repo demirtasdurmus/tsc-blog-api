@@ -1,7 +1,6 @@
 import axios from "axios";
 import AppError from "./appError";
-import { UserModel } from "../models/db/user";
-import { EmailRequest } from "../interfaces";
+import { EmailRequest, UserModel } from "../interfaces";
 
 
 export default class Email {

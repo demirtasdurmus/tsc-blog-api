@@ -1,12 +1,7 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import db from "../index";
+import { ReviewModel } from '../../interfaces';
 
-interface ReviewModel extends Model<InferAttributes<ReviewModel>, InferCreationAttributes<ReviewModel>> {
-    content: string;
-    verifyStatus: "verified" | "pending" | "rejected";
-    feedback: string;
-    response: "positive" | "negative";
-}
 
 const Review = db.define<ReviewModel>('review',
     {

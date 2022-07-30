@@ -1,30 +1,8 @@
 import bcrypt from "bcrypt";
-import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import db from "../index";
 import AppError from "../../utils/appError";
-
-export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
-    id?: number;
-    firstName: string;
-    lastName: string;
-    bio?: string;
-    email: string;
-    password: string;
-    passwordConfirm: string;
-    isVerified?: boolean;
-    memberStatus?: "active" | "passive";
-    profileImage?: string;
-    refreshToken?: string;
-    roleId?: number;
-    RoleId?: number;
-    createdAt?: string;
-    updatedAt?: string;
-    role?: {
-        id?: number;
-        name?: string;
-        code?: string;
-    }
-}
+import { UserModel } from "../../interfaces";
 
 const User = db.define<UserModel>('user', {
     firstName: {

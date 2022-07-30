@@ -1,11 +1,7 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import db from "../index";
+import { CategoryModel } from '../../interfaces';
 
-interface CategoryModel extends Model<InferAttributes<CategoryModel>, InferCreationAttributes<CategoryModel>> {
-    name: string;
-    keywords: string;
-    categoryStatus: "active" | "passive";
-}
 
 const Category = db.define<CategoryModel>('category',
     {

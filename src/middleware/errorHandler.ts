@@ -12,6 +12,7 @@ export default class ErrorHandler {
         return async (err: AppError, req: Request, res: Response, next: NextFunction) => {
             err.statusCode = err.statusCode || 500;
             err.status = ErrorStatus.Error || 'Error';
+            if (err.statusCode === 401) res.clearCookie(process.env.COOKIE_NAME)
             // handling errors acoording to node_env
             if (process.env.NODE_ENV === 'production') {
                 this.sendErrorProd(err, req, res);
@@ -55,40 +56,6 @@ export default class ErrorHandler {
             // pass the error to the actual error handler middleware
             next(error);
         };
-    };
-
-    static convertt = (err: any, req: Request, res: Response, next: NextFunction) => {
-        let error = err;
-        if (!(error instanceof AppError)) {
-            // set initial statusCode to 400 if not already set
-            error.statusCode = error.statusCode || httpStatus.BAD_REQUEST;
-
-            // convert errors conditionally
-            if (error instanceof JsonWebTokenError) {
-                error.message = 'Invalid session. Please log in again.';
-                // error.statusCode = httpStatus.UNAUTHORIZED;
-                res.clearCookie("__session");
-            } else if (error instanceof TokenExpiredError) {
-                error.message = 'Session expired. Please log in again.';
-                // error.statusCode = httpStatus.UNAUTHORIZED;
-                res.clearCookie("__session");
-            } else if (error instanceof NotBeforeError) {
-                error.message = 'Session not active. Please log in again.';
-                // error.statusCode = httpStatus.UNAUTHORIZED;
-                res.clearCookie("__session");
-            } else if (error instanceof ValidationError) {
-                error = this.convertSequelizeError(error);
-            } else {
-                error.statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
-                error.message = error.message || httpStatus[error.statusCode];
-                error.isOperational = false;
-            };
-
-            // recreate the error object with the new arguments
-            error = new AppError(error.statusCode, error.message, error.isOperational, error.name, error.stack);
-        };
-        // pass the error to the actual error handler middleware
-        next(error);
     };
 
     static initializeUncaughtException = () => {

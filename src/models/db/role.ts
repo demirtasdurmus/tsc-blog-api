@@ -1,11 +1,6 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import db from "../index";
-
-interface RoleModel extends Model<InferAttributes<RoleModel>, InferCreationAttributes<RoleModel>> {
-    id: number;
-    name: "user" | "author" | "admin";
-    code: string;
-}
+import { RoleModel } from '../../interfaces';
 
 const Role = db.define<RoleModel>('role',
     {

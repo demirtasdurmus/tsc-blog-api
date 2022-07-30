@@ -1,19 +1,9 @@
 import slugify from 'slugify';
-import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import db from "../index";
 import AppError from "../../utils/appError";
+import { BlogModel } from '../../interfaces';
 
-interface BlogModel extends Model<InferAttributes<BlogModel>, InferCreationAttributes<BlogModel>> {
-    title: string;
-    slug: string;
-    keywords: string;
-    summary: string;
-    content: string;
-    image: string;
-    blogStatus: "active" | "passive";
-    length: number;
-    clapCount: number;
-}
 
 const Blog = db.define<BlogModel>('blog',
     {

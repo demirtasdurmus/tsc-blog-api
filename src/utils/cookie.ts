@@ -36,11 +36,11 @@ export default class Cookie {
         }
     }
 
-    decrypt = (cookie: string) => {
+    static decrypt = (cookie: string) => {
         try {
             // check if cookie has the min length to be decrypted
             if (cookie.length < 43) {
-                return null;
+                throw new AppError(401, "Invalid session")
             };
             // extract encrypted token from the cookie
             const unprefixedCookie = cookie.slice(27, cookie.length);
