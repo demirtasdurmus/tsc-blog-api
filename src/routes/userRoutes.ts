@@ -1,10 +1,15 @@
 import { Router } from "express";
 const router = Router();
-import { updateProfile } from "../controllers/userControllers";
+import { updateProfile } from "../controllers/userControllers"
+import uploadSingleFile from "../middleware/uploadSingleFile"
+import resizeSignleImage from "../middleware/resizeSingleImage"
 
 
 router
-    .post("/", updateProfile)
+    .post("/",
+        uploadSingleFile("profileImage", "memory"),
+        resizeSignleImage("profileImage", process.env.PROFILE_IMAGES_DIR),
+        updateProfile)
 
 
 export default router;

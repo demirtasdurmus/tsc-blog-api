@@ -12,7 +12,6 @@ export default class ErrorHandler {
             if (!(error instanceof AppError)) {
                 // set initial statusCode to 400 if not already set
                 error.statusCode = error.statusCode || httpStatus.BAD_REQUEST;
-
                 // convert errors conditionally
                 if (error instanceof ValidationError) {
                     error = this.convertSequelizeError(error);
@@ -30,7 +29,6 @@ export default class ErrorHandler {
                     error.message = error.message || httpStatus[error.statusCode];
                     error.isOperational = false;
                 };
-
                 // recreate the error object with the new arguments
                 error = new AppError(error.statusCode, error.message, error.isOperational, error.name, error.stack);
             };
@@ -92,13 +90,13 @@ export default class ErrorHandler {
 
     private static sendErrorDev = (err: AppError, res: Response) => {
         // 1) log error to console
-        // console.log(`-------------${err.name}------------`)
-        // console.log("headersSent: ?", res.headersSent)
-        // console.log("isOperational: ?", err.isOperational)
-        // console.log(err.message)
-        // console.log("-------------stack----------------")
-        // console.log(err.stack)
-        // console.log("----------------------------------")
+        console.log(`-------------${err.name}------------`)
+        console.log("headersSent: ?", res.headersSent)
+        console.log("isOperational: ?", err.isOperational)
+        console.log(err.message)
+        console.log("-------------stack----------------")
+        console.log(err.stack)
+        console.log("----------------------------------")
 
         // 2) send error message to client
         res.status(err.statusCode).send({

@@ -10,6 +10,11 @@ type User = {
 declare namespace Express {
     interface Request {
         userId?: number;
-        user?: User
+        user?: User;
+        file?: {
+            filename?: string;
+            filepath?: string;
+            buffer?: string;
+        }
     }
 }

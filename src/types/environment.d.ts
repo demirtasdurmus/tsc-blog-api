@@ -26,6 +26,8 @@ declare global {
             JWT_REFRESH_SECRET: string;
             JWT_REFRESH_EXPIRY: string;
             PASSWORD_HASH_CYCLE: string;
+            PROFILE_IMAGES_DIR: string;
+            BLOG_IMAGES_DIR: string;
         }
     }
 }
