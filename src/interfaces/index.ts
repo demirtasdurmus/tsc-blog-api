@@ -99,11 +99,15 @@ export interface File {
     size: number;
     filepath?: string
 }
-
 export interface ProfileData {
     firstName: string;
     lastName: string;
     bio: string;
     oldImage: string;
     profileImage?: string;
+}
+export interface PasswordData {
+    oldPassword: string;
+    password: string;
+    passwordConfirm: string;
 }
