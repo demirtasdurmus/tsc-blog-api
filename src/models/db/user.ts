@@ -102,12 +102,8 @@ const User = db.define<UserModel>('user', {
 );
 
 User.beforeCreate((user: UserModel) => {
-    try {
-        user.roleId = 1;
-        user.password = bcrypt.hashSync(user.password, Number(process.env.PASSWORD_HASH_CYCLE))
-    } catch (err: any) {
-        throw new AppError(500, err.message, false, err.name, err.stack)
-    }
+    user.roleId = 1;
+    user.password = bcrypt.hashSync(user.password, Number(process.env.PASSWORD_HASH_CYCLE))
 });
 
 User.afterCreate(async (user: UserModel) => {

@@ -8,7 +8,7 @@ export default class Email {
     constructor(user: UserModel, data: any, fromOption: string = `${process.env.SENDGRID_EMAIL_FROM}`) {
         this.request = {
             "from": {
-                "email": `platform.rexven.com <${fromOption}>`
+                "email": `blog.durmusdemirtas.com <${fromOption}>`
             },
             "reply_to": {
                 "email": `${process.env.SENDGRID_EMAIL_REPLY_TO}`

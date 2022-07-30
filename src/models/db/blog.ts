@@ -71,12 +71,8 @@ const Blog = db.define<BlogModel>('blog',
 )
 
 Blog.beforeCreate((blog: BlogModel) => {
-    try {
-        blog.slug = slugify(blog.title, { lower: true })
-        blog.length = blog.content.length;
-    } catch (err: any) {
-        throw new AppError(500, err.message, false, err.name, err.stack)
-    }
+    blog.slug = slugify(blog.title, { lower: true })
+    blog.length = blog.content.length;
 })
 
 export default Blog;

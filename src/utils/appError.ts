@@ -15,7 +15,7 @@ export default class AppError extends Error {
         this.statusCode = statusCode;
         this.isOperational = isOperational;
         this.name = name;
-        this.status = statusCode ? (statusCode.toString().startsWith('4') ? "fail" : "error") : "error";
+        this.status = statusCode.toString().startsWith('4') ? "fail" : "error"
         if (stack) {
             this.stack = stack;
         } else {

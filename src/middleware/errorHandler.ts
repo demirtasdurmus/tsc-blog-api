@@ -3,7 +3,7 @@ import httpStatus from 'http-status'
 import { Request, Response, NextFunction } from 'express'
 import AppError from '../utils/appError'
 import { Sequelize, ValidationError, Error, ValidationErrorItem } from "sequelize"
-import { JsonWebTokenError, TokenExpiredError, NotBeforeError } from "jsonwebtoken"
+
 
 export default class ErrorHandler {
     static convert = () => {
@@ -14,20 +14,17 @@ export default class ErrorHandler {
                 error.statusCode = error.statusCode || httpStatus.BAD_REQUEST;
 
                 // convert errors conditionally
-                if (error instanceof JsonWebTokenError) {
-                    error.message = 'Invalid session. Please log in again.';
-                    // error.statusCode = httpStatus.UNAUTHORIZED;
-                    res.clearCookie("__session");
-                } else if (error instanceof TokenExpiredError) {
-                    error.message = 'Session expired. Please log in again.';
-                    // error.statusCode = httpStatus.UNAUTHORIZED;
-                    res.clearCookie("__session");
-                } else if (error instanceof NotBeforeError) {
-                    error.message = 'Session not active. Please log in again.';
-                    // error.statusCode = httpStatus.UNAUTHORIZED;
-                    res.clearCookie("__session");
-                } else if (error instanceof ValidationError) {
+                if (error instanceof ValidationError) {
                     error = this.convertSequelizeError(error);
+                } else if (error.name === "JsonWebTokenError") {
+                    error.message = 'Invalid session. Please log in again.';
+                    error.statusCode = httpStatus.UNAUTHORIZED;
+                } else if (error === "TokenExpiredError") {
+                    error.message = 'Session expired. Please log in again.';
+                    error.statusCode = httpStatus.UNAUTHORIZED;
+                } else if (error === "NotBeforeError") {
+                    error.message = 'Session not active. Please log in again.';
+                    error.statusCode = httpStatus.UNAUTHORIZED;
                 } else {
                     error.statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
                     error.message = error.message || httpStatus[error.statusCode];
@@ -95,13 +92,13 @@ export default class ErrorHandler {
 
     private static sendErrorDev = (err: AppError, res: Response) => {
         // 1) log error to console
-        console.log(`-------------${err.name}------------`)
-        console.log("headersSent: ?", res.headersSent)
-        console.log("isOperational: ?", err.isOperational)
-        console.log(err.message)
-        console.log("-------------stack----------------")
-        console.log(err.stack)
-        console.log("----------------------------------")
+        // console.log(`-------------${err.name}------------`)
+        // console.log("headersSent: ?", res.headersSent)
+        // console.log("isOperational: ?", err.isOperational)
+        // console.log(err.message)
+        // console.log("-------------stack----------------")
+        // console.log(err.stack)
+        // console.log("----------------------------------")
 
         // 2) send error message to client
         res.status(err.statusCode).send({
@@ -114,7 +111,6 @@ export default class ErrorHandler {
     }
 
     private static sendErrorProd = (err: AppError, req: Request, res: Response) => {
-        console.log("******", err)
         // Operational, trusted error: send message to client
         if (err.isOperational) {
             // check if the headers is sent
