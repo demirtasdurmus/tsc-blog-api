@@ -10,16 +10,16 @@ import ErrorHandler from "./middleware/errorHandler"
 
 const app: Application = express();
 
-if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
-};
+// if (process.env.NODE_ENV === "development") {
+app.use(morgan("dev"));
+// };
 app.use(cors());
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cookieParser());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../", "public")));
+app.use(express.static(path.join(__dirname, "../", "images")));
 
 app.use(`/api/${process.env.API_VERSION}`, api);
 

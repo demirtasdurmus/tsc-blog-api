@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"
 import AppError from "../utils/appError"
 import Cookie from "../utils/cookie"
 import Email from "../utils/email"
@@ -20,7 +20,6 @@ export default class AuthService {
                 password,
                 passwordConfirm
             });
-            console.log("----", newUser.toJSON())
             // sign a jwt token
             const data = { id: newUser.id }
             const secret = process.env.JWT_VERIFY_SECRET
@@ -124,7 +123,7 @@ export default class AuthService {
                 where: {
                     id: decoded.id
                 },
-                attributes: ["id", "firstName", "lastName", "email", "memberStatus"],
+                attributes: ["id", "firstName", "lastName", "email", "memberStatus", "profileImage"],
                 include: [
                     { model: Role, attributes: ["id", "name", "code"] }
                 ]
@@ -139,11 +138,12 @@ export default class AuthService {
             };
 
             const userData = {
-                id: user.id,
+                id: user.id!,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                role: user.role!.code,
+                role: user.role!.code!,
                 email: user.email,
+                profileImage: user.profileImage
             };
             return userData;
         } catch (err: any) {

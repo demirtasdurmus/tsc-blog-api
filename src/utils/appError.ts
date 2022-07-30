@@ -1,13 +1,11 @@
-enum ErrorStatus { Fail, Error }
-
 export default class AppError extends Error {
     statusCode: number;
     isOperational: boolean;
     name: string;
-    status: ErrorStatus;
+    status: string;
 
     constructor(
-        statusCode: number = 500,
+        statusCode: number,
         message: string,
         isOperational: boolean = true,
         name: string = "Error",
@@ -17,7 +15,7 @@ export default class AppError extends Error {
         this.statusCode = statusCode;
         this.isOperational = isOperational;
         this.name = name;
-        this.status = statusCode.toString().startsWith('4') ? ErrorStatus.Fail : ErrorStatus.Error;
+        this.status = statusCode ? (statusCode.toString().startsWith('4') ? "fail" : "error") : "error";
         if (stack) {
             this.stack = stack;
         } else {

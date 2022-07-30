@@ -14,7 +14,6 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
     profileImage?: string;
     refreshToken?: string;
     roleId?: number;
-    RoleId?: number;
     createdAt?: string;
     updatedAt?: string;
     role?: {

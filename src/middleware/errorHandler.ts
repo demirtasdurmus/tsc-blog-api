@@ -5,23 +5,7 @@ import AppError from '../utils/appError'
 import { Sequelize, ValidationError, Error, ValidationErrorItem } from "sequelize"
 import { JsonWebTokenError, TokenExpiredError, NotBeforeError } from "jsonwebtoken"
 
-enum ErrorStatus { Fail, Error }
-
 export default class ErrorHandler {
-    static handle = () => {
-        return async (err: AppError, req: Request, res: Response, next: NextFunction) => {
-            err.statusCode = err.statusCode || 500;
-            err.status = ErrorStatus.Error || 'Error';
-            if (err.statusCode === 401) res.clearCookie(process.env.COOKIE_NAME)
-            // handling errors acoording to node_env
-            if (process.env.NODE_ENV === 'production') {
-                this.sendErrorProd(err, req, res);
-            } else {
-                this.sendErrorDev(err, res);
-            };
-        };
-    };
-
     static convert = () => {
         return async (err: any, req: Request, res: Response, next: NextFunction) => {
             let error = err;
@@ -55,6 +39,19 @@ export default class ErrorHandler {
             };
             // pass the error to the actual error handler middleware
             next(error);
+        };
+    };
+
+    static handle = () => {
+        return async (err: AppError, req: Request, res: Response, next: NextFunction) => {
+            err.statusCode = err.statusCode || 500;
+            if (err.statusCode === 401) res.clearCookie(process.env.COOKIE_NAME)
+            // handling errors acoording to node_env
+            if (process.env.NODE_ENV === 'production') {
+                this.sendErrorProd(err, req, res);
+            } else {
+                this.sendErrorDev(err, res);
+            };
         };
     };
 
@@ -117,6 +114,7 @@ export default class ErrorHandler {
     }
 
     private static sendErrorProd = (err: AppError, req: Request, res: Response) => {
+        console.log("******", err)
         // Operational, trusted error: send message to client
         if (err.isOperational) {
             // check if the headers is sent

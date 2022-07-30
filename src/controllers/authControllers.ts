@@ -26,7 +26,7 @@ export const login: RequestHandler = catchAsync(async (req, res, next) => {
     // assign the cookie to the response
     res.cookie(process.env.COOKIE_NAME, sessionCookie, {
         expires: sessionExpiry,
-        httpOnly: true,
+        httpOnly: false,
         secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
         sameSite: process.env.NODE_ENV === "development" ? "lax" : "strict"
     });

@@ -56,7 +56,7 @@ export default class JWT {
         try {
             return await promisify<string, Secret>(jwt.verify)(inputs.token, inputs.secret);
         } catch (err: any) {
-            throw new AppError(err.statusCode, err.message, true, err.name, err.stack)
+            throw new AppError(401, err.message, true, err.name, err.stack)
         }
     }
 
