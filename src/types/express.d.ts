@@ -12,9 +12,14 @@ declare namespace Express {
         userId?: number;
         user?: User;
         file?: {
-            filename?: string;
+            filename: string;
+            fieldname: string;
+            originalname: string;
+            encoding: string;
+            mimetype: string;
+            buffer: Buffer;
+            size: number;
             filepath?: string;
-            buffer?: string;
         }
     }
 }

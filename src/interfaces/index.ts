@@ -4,7 +4,9 @@ import { Model, InferAttributes, InferCreationAttributes } from 'sequelize';
 export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
     id?: number;
     firstName: string;
+    first_name?: string;
     lastName: string;
+    last_name?: string;
     bio?: string;
     email: string;
     password: string;
@@ -12,6 +14,7 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
     isVerified?: boolean;
     memberStatus?: "active" | "passive";
     profileImage?: string;
+    profile_image?: string;
     refreshToken?: string;
     roleId?: number;
     createdAt?: string;
@@ -86,4 +89,21 @@ export interface LoginData {
     email: string;
     password: string;
     remember?: boolean
+}
+export interface File {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    buffer: Buffer;
+    size: number;
+    filepath?: string
+}
+
+export interface ProfileData {
+    firstName: string;
+    lastName: string;
+    bio: string;
+    oldImage: string;
+    profileImage?: string;
 }

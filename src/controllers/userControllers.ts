@@ -5,6 +5,6 @@ const userService = new UserService()
 
 
 export const updateProfile: RequestHandler = catchAsync(async (req, res, next) => {
-    const data = await userService.updateProfile(req.body);
+    const data = await userService.updateProfile(req.userId!, req.protocol, req.get('host')!, req.body, req.file);
     return res.status(200).send({ status: "success", data });
 });

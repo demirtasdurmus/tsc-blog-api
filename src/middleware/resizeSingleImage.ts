@@ -8,9 +8,8 @@ import catchAsync from "../utils/catchAsync";
 const resizeSignleImage = (name: string, path: string, width?: number, height?: number, quality?: number, format: "jpeg" | "png" | "jpg" = "jpg") => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
         if (!req.file) return next();
-        console.log("first,", req.file);
         let fileSlug = name
-        if (name === "profileImage") fileSlug = slugify(`${req.user?.firstName} ${req.user?.lastName}`, { lower: true })
+        if (name === "profileImage") fileSlug = slugify(`${req.user!.firstName} ${req.user!.lastName}`, { lower: true })
 
         req.file.filename = `${fileSlug}-${uuidv4()}.${format}`;
         req.file.filepath = `${path}/${req.file.filename}`;

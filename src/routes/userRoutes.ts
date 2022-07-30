@@ -8,7 +8,7 @@ import resizeSignleImage from "../middleware/resizeSingleImage"
 router
     .post("/",
         uploadSingleFile("profileImage", "memory"),
-        resizeSignleImage("profileImage", process.env.PROFILE_IMAGES_DIR),
+        resizeSignleImage("profileImage", process.env.PROFILE_IMAGES_DIR, 200, 200),
         updateProfile)
 
 

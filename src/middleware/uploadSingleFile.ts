@@ -3,15 +3,16 @@ import multer from "multer"
 import { v4 as uuidv4 } from "uuid"
 import slugify from "slugify"
 import AppError from "../utils/appError"
+import { File } from "../interfaces";
 
 
 // configure disk storage option
 const storeOnDisk = (path?: string) => {
     return multer.diskStorage({
-        destination: (req: Request, file: any, cb: Function) => {
+        destination: (req: Request, file: File, cb: Function) => {
             cb(null, path ? `images/${path}` : "images");
         },
-        filename: (req: Request, file: any, cb: Function) => {
+        filename: (req: Request, file: File, cb: Function) => {
             const ext = file.mimetype.split('/')[1];
             let fileName: string;
             if (file.fieldname === "profileImage") {
@@ -28,7 +29,7 @@ const storeOnDisk = (path?: string) => {
 // configure memory storage option
 const memoryStorage = multer.memoryStorage()
 
-const fileFilter = (req: Request, file: any, cb: Function) => {
+const fileFilter = (req: Request, file: File, cb: Function) => {
     if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
         cb(null, true);
     } else {
