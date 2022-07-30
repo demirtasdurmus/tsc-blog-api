@@ -20,7 +20,7 @@ export interface EmailRequest {
 
 export interface JwtSignInputs {
     data: {
-        id: number;
+        id: number | undefined;
         email?: string;
         role?: string;
     };

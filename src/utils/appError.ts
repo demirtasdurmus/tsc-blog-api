@@ -7,7 +7,7 @@ export default class AppError extends Error {
     status: ErrorStatus;
 
     constructor(
-        statusCode: number,
+        statusCode: number = 500,
         message: string,
         isOperational: boolean = true,
         name: string = "Error",

@@ -10,7 +10,7 @@ db.authenticate()
     .then(() => console.log(`Connected to ${db.config.database} successfully`))
     .catch((err) => console.log(`Unable to connect ${db.config.database}:`, err.message))
 
-db.sync({ force: true })
+db.sync({ force: false })
     .then(() => console.log(`Synced to ${db.config.database} successfully`))
     .catch((err) => console.log(`Unable to sync ${db.config.database}:`, err))
 

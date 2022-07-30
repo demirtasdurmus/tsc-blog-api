@@ -15,7 +15,7 @@ interface BlogModel extends Model<InferAttributes<BlogModel>, InferCreationAttri
     clapCount: number;
 }
 
-const Blog = db.define<BlogModel>('Blog',
+const Blog = db.define<BlogModel>('blog',
     {
         title: {
             type: DataTypes.STRING(100),

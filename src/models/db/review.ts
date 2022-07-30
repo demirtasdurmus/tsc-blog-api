@@ -8,7 +8,7 @@ interface ReviewModel extends Model<InferAttributes<ReviewModel>, InferCreationA
     response: "positive" | "negative";
 }
 
-const Review = db.define<ReviewModel>('Review',
+const Review = db.define<ReviewModel>('review',
     {
         content: {
             type: DataTypes.TEXT,

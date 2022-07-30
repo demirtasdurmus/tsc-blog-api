@@ -1,5 +1,5 @@
-var API_URL,
-    CLIENT_URL;
+var API_URL: string,
+    CLIENT_URL: string;
 
 if (process.env.NODE_ENV === 'production') {
     API_URL = process.env.API_URL_PROD;

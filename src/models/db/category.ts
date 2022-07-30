@@ -7,7 +7,7 @@ interface CategoryModel extends Model<InferAttributes<CategoryModel>, InferCreat
     categoryStatus: "active" | "passive";
 }
 
-const Category = db.define<CategoryModel>('Category',
+const Category = db.define<CategoryModel>('category',
     {
         name: {
             type: DataTypes.STRING(100),

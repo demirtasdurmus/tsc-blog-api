@@ -4,19 +4,29 @@ import db from "../index";
 import AppError from "../../utils/appError";
 
 export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
+    id?: number;
     firstName: string;
     lastName: string;
-    bio: string;
+    bio?: string;
     email: string;
     password: string;
     passwordConfirm: string;
-    isVerified: boolean;
-    memberStatus: "active" | "passive";
-    profileImage: string;
-    refreshToken: string;
+    isVerified?: boolean;
+    memberStatus?: "active" | "passive";
+    profileImage?: string;
+    refreshToken?: string;
+    roleId?: number;
+    RoleId?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    role?: {
+        id?: number;
+        name?: string;
+        code?: string;
+    }
 }
 
-const User = db.define<UserModel>('User', {
+const User = db.define<UserModel>('user', {
     firstName: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -97,7 +107,7 @@ const User = db.define<UserModel>('User', {
     memberStatus: {
         type: DataTypes.ENUM("active", "passive"),
         allowNull: false,
-        defaultValue: "active",
+        defaultValue: "passive",
     },
     profileImage: {
         type: DataTypes.STRING(150),
@@ -113,10 +123,10 @@ const User = db.define<UserModel>('User', {
     }
 );
 
-User.beforeCreate((user: any) => {
+User.beforeCreate((user: UserModel) => {
     try {
-        user.password = bcrypt.hashSync(user.password, Number(process.env.PASSWORD_HASH_CYCLE))
         user.roleId = 1;
+        user.password = bcrypt.hashSync(user.password, Number(process.env.PASSWORD_HASH_CYCLE))
     } catch (err: any) {
         throw new AppError(500, err.message, false, err.name, err.stack)
     }

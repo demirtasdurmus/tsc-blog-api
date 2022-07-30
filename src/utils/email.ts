@@ -6,7 +6,7 @@ import { EmailRequest } from "../interfaces";
 
 export default class Email {
     request: EmailRequest
-    constructor(user: UserModel, data: any, fromOption = `${process.env.SENDGRID_EMAIL_FROM}`) {
+    constructor(user: UserModel, data: any, fromOption: string = `${process.env.SENDGRID_EMAIL_FROM}`) {
         this.request = {
             "from": {
                 "email": `platform.rexven.com <${fromOption}>`
