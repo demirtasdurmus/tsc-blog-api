@@ -145,6 +145,12 @@ export default class UserService {
         return ""
     }
 
+    public clapBlog = async (id: number) => {
+        this.isPropertyNaN(id, "blog")
+        await Blog.increment('clapCount', { by: 1, where: { id } })
+        return ""
+    }
+
     public createReview = async (userId: number, data: ReviewModel) => {
         if (!data.blogId) throw new AppError(400, "Blog id must be provided")
         this.isPropertyNaN(data.blogId, "blog")

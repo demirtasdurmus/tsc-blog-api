@@ -7,6 +7,7 @@ import {
     createBlog,
     updateBlog,
     deleteBlog,
+    clapBlog,
     createReview,
     updateReview
 } from "../controllers/userControllers"
@@ -40,6 +41,7 @@ router
     .delete("/blogs/:id", authorizeOnly("author", "admin"), deleteBlog)
 
     // user's reviews
+    .get("/reviews/:id", clapBlog)
     .post("/reviews", createReview)
     .patch("/reviews/:id", updateReview)
 
