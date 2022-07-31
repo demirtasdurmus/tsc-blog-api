@@ -25,7 +25,7 @@ export const getUserBlogById: RequestHandler = catchAsync(async (req, res, next)
 })
 
 export const createBlog: RequestHandler = catchAsync(async (req, res, next) => {
-    const data = await userService.updatePassword(req.userId!, req.body);
+    const data = await userService.createBlog(req.userId!, req.protocol, req.get('host')!, req.body, req.file);
     return res.status(200).send({ status: "success", data });
 })
 

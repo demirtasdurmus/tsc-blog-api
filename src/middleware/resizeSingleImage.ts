@@ -10,7 +10,7 @@ const resizeSignleImage = (name: string, path: string, width?: number, height?: 
         if (!req.file) return next();
         let fileSlug = name
         if (name === "profileImage") fileSlug = slugify(`${req.user!.firstName} ${req.user!.lastName}`, { lower: true })
-
+        if (name === "blogImage") fileSlug = slugify(`${req.body.title ? req.body.title : req.file.originalname}`, { lower: true })
         req.file.filename = `${fileSlug}-${uuidv4()}.${format}`;
         req.file.filepath = `${path}/${req.file.filename}`;
 

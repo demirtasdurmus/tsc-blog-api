@@ -22,7 +22,7 @@ const Blog = db.define<BlogModel>('blog',
         },
         slug: {
             type: DataTypes.STRING(50),
-            allowNull: false,
+            allowNull: true,
         },
         keywords: {
             type: DataTypes.TEXT,
@@ -57,7 +57,7 @@ const Blog = db.define<BlogModel>('blog',
         },
         length: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         clapCount: {
             type: DataTypes.INTEGER,

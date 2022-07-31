@@ -1,10 +1,15 @@
 import fs from "fs"
-import bcrypt from "bcrypt";
-import { Op } from "sequelize";
+import bcrypt from "bcrypt"
+import { Op } from "sequelize"
 import { User, Blog } from "../models/db"
 import AppError from "../utils/appError"
-import { paginate } from "../utils/helpers";
-import { ProfileData, File, PasswordData, BlogFilter } from "../interfaces"
+import {
+    ProfileData,
+    File,
+    PasswordData,
+    BlogFilter,
+    BlogData
+} from "../interfaces"
 
 
 export default class UserService {
@@ -19,7 +24,7 @@ export default class UserService {
             if (data.oldImage) {
                 oldPath = `./images/${data.oldImage.slice(hostName.length + 1)}`;
             }
-            this.deleteOldImage(oldPath)
+            this.deleteFileIfExists(oldPath)
         }
         const newValues = { profileImage, ...data }
         Object.keys(newValues).forEach((key: string) => {
@@ -64,7 +69,7 @@ export default class UserService {
     }
 
     public getUserBlogs = async (userId: number, query: BlogFilter) => {
-        const { limit, offset } = paginate(query.page, query.limit)
+        const { limit, offset } = this.paginate(query.page, query.limit)
         return await Blog.findAll({
             where: {
                 userId,
@@ -91,7 +96,16 @@ export default class UserService {
         return await Blog.findOne({ where: { id, userId } })
     }
 
-    private deleteOldImage = (path: string | "") => {
+    public createBlog = async (userId: number, protocol: string, host: string, data: BlogData, file?: File) => {
+        const hostName = protocol + '://' + host
+        let image = "";
+        if (file) {
+            image = hostName + '/' + file.filepath
+        }
+        return await Blog.create({ userId, image, ...data })
+    }
+
+    private deleteFileIfExists = (path: string | "") => {
         if (path) {
             fs.access(path, function (err: any) {
                 if (!err) {
@@ -100,5 +114,11 @@ export default class UserService {
             });
         }
         return
+    }
+
+    private paginate = (clientPage: number = 1, clientLimit: number = 10, maxLimit: number = 100) => {
+        let limit = +clientLimit < +maxLimit ? clientLimit : +maxLimit;
+        let offset = (+clientPage - 1) * +limit;
+        return { limit, offset }
     }
 }

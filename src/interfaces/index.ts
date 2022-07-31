@@ -44,15 +44,16 @@ export interface CategoryModel extends Model<InferAttributes<CategoryModel>, Inf
 export interface BlogModel extends Model<InferAttributes<BlogModel>, InferCreationAttributes<BlogModel>> {
     id?: number;
     title: string;
-    slug: string;
-    keywords: string;
-    summary: string;
+    slug?: string;
+    keywords?: string;
+    summary?: string;
     content: string;
-    image: string;
-    blogStatus: "active" | "passive";
-    length: number;
-    clapCount: number;
+    image?: string;
+    blogStatus?: "active" | "passive";
+    length?: number;
+    clapCount?: number;
     userId?: number;
+    categoryId?: number;
 }
 // other interfaces
 export interface EmailRequest {
@@ -117,4 +118,12 @@ export interface BlogFilter {
     page?: number;
     limit?: number;
     q?: string;
+}
+export interface BlogData {
+    title: string;
+    keywords: string;
+    summary?: string;
+    content: string;
+    image?: string;
+    categoryId: number
 }

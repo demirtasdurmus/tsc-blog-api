@@ -25,8 +25,8 @@ router
     .get("/blogs/:id", authorizeOnly("author", "admin"), getUserBlogById)
     .post("/blogs",
         authorizeOnly("author", "admin"),
-        uploadSingleFile("profileImage", "memory"),
-        resizeSignleImage("profileImage", process.env.BLOG_IMAGES_DIR, 400, 400),
+        uploadSingleFile("blogImage", "memory"),
+        resizeSignleImage("blogImage", process.env.BLOG_IMAGES_DIR, 400, 400),
         createBlog)
     .patch("/blogs/:id", authorizeOnly("author", "admin"), updateBlog)
     .delete("/blogs/:id", authorizeOnly("author", "admin"), deleteBlog)
