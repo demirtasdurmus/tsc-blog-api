@@ -128,7 +128,7 @@ export default class AuthService {
             id: user.id!,
             firstName: user.firstName,
             lastName: user.lastName,
-            role: user.role!.code!,
+            role: user.role!.name!,
             email: user.email,
             profileImage: user.profileImage
         };

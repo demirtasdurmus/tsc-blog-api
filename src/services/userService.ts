@@ -1,8 +1,10 @@
 import fs from "fs"
 import bcrypt from "bcrypt";
-import { User } from "../models/db"
+import { Op } from "sequelize";
+import { User, Blog } from "../models/db"
 import AppError from "../utils/appError"
-import { ProfileData, File, PasswordData } from "../interfaces"
+import { paginate } from "../utils/helpers";
+import { ProfileData, File, PasswordData, BlogFilter } from "../interfaces"
 
 
 export default class UserService {
@@ -59,6 +61,34 @@ export default class UserService {
             { where: { id: userId } }
         );
         return "";
+    }
+
+    public getUserBlogs = async (userId: number, query: BlogFilter) => {
+        const { limit, offset } = paginate(query.page, query.limit)
+        return await Blog.findAll({
+            where: {
+                userId,
+                [Op.or]: [
+                    {
+                        title: {
+                            [Op.iLike]: `%${query.q}%`
+                        }
+                    },
+                    {
+                        keywords: {
+                            [Op.iLike]: `%${query.q}%`
+                        }
+                    }
+                ]
+            },
+            limit,
+            offset
+        })
+    }
+
+    public getUserBlogById = async (userId: number, id: number) => {
+        if (isNaN(id)) throw new AppError(400, "Invalid Blog Id")
+        return await Blog.findOne({ where: { id, userId } })
     }
 
     private deleteOldImage = (path: string | "") => {

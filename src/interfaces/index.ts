@@ -42,6 +42,7 @@ export interface CategoryModel extends Model<InferAttributes<CategoryModel>, Inf
     categoryStatus: "active" | "passive";
 }
 export interface BlogModel extends Model<InferAttributes<BlogModel>, InferCreationAttributes<BlogModel>> {
+    id?: number;
     title: string;
     slug: string;
     keywords: string;
@@ -51,6 +52,7 @@ export interface BlogModel extends Model<InferAttributes<BlogModel>, InferCreati
     blogStatus: "active" | "passive";
     length: number;
     clapCount: number;
+    userId?: number;
 }
 // other interfaces
 export interface EmailRequest {
@@ -110,4 +112,9 @@ export interface PasswordData {
     oldPassword: string;
     password: string;
     passwordConfirm: string;
+}
+export interface BlogFilter {
+    page?: number;
+    limit?: number;
+    q?: string;
 }
