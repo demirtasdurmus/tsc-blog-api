@@ -31,10 +31,13 @@ export interface RoleModel extends Model<InferAttributes<RoleModel>, InferCreati
     code: string;
 }
 export interface ReviewModel extends Model<InferAttributes<ReviewModel>, InferCreationAttributes<ReviewModel>> {
+    id?: number;
     content: string;
-    verifyStatus: "verified" | "pending" | "rejected";
-    feedback: string;
-    response: "positive" | "negative";
+    verifyStatus?: "verified" | "pending" | "rejected";
+    feedback?: string;
+    response?: "positive" | "negative";
+    userId?: number;
+    blogId?: number;
 }
 export interface CategoryModel extends Model<InferAttributes<CategoryModel>, InferCreationAttributes<CategoryModel>> {
     name: string;

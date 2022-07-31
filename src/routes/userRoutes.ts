@@ -6,7 +6,9 @@ import {
     getUserBlogById,
     createBlog,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    createReview,
+    updateReview
 } from "../controllers/userControllers"
 import authorizeOnly from "../controllers/athorizeOnly";
 import uploadSingleFile from "../middleware/uploadSingleFile"
@@ -15,12 +17,14 @@ const router = Router()
 
 
 router
+    // user's profile and security
     .post("/",
         uploadSingleFile("profileImage", "memory"),
         resizeSignleImage("profileImage", process.env.PROFILE_IMAGES_DIR, 200, 200),
         updateProfile)
     .patch("/", updatePassword)
 
+    // user's blog posts
     .get("/blogs", authorizeOnly("author", "admin"), getUserBlogs)
     .get("/blogs/:id", authorizeOnly("author", "admin"), getUserBlogById)
     .post("/blogs",
@@ -34,6 +38,10 @@ router
         resizeSignleImage("blogImage", process.env.BLOG_IMAGES_DIR, 400, 400),
         updateBlog)
     .delete("/blogs/:id", authorizeOnly("author", "admin"), deleteBlog)
+
+    // user's reviews
+    .post("/reviews", createReview)
+    .patch("/reviews/:id", updateReview)
 
 
 export default router;

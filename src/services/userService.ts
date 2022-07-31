@@ -1,14 +1,15 @@
 import fs from "fs"
 import bcrypt from "bcrypt"
 import { Op } from "sequelize"
-import { User, Blog } from "../models/db"
+import { User, Blog, Review } from "../models/db"
 import AppError from "../utils/appError"
 import {
     ProfileData,
     File,
     PasswordData,
     BlogFilter,
-    BlogData
+    BlogData,
+    ReviewModel
 } from "../interfaces"
 
 
@@ -39,7 +40,7 @@ export default class UserService {
                 // raw: true
             }
         )
-        return user[1][0].toJSON()
+        return user[1][0]
     }
 
     public updatePassword = async (userId: number, data: PasswordData) => {
@@ -131,7 +132,7 @@ export default class UserService {
                 // raw: true
             }
         )
-        return blog[1][0].toJSON()
+        return blog[1][0]
     }
 
     public deleteBlog = async (id: number, userId: number) => {
@@ -141,6 +142,31 @@ export default class UserService {
                 blogStatus: "passive"
             }, { where: { id, userId } })
         return ""
+    }
+
+    public createReview = async (userId: number, data: ReviewModel) => {
+        if (!data.blogId) throw new AppError(400, "Blog id must be provided")
+        this.isPropertyNaN(data.blogId, "blog")
+        const blog = await Blog.findByPk(data.blogId, { attributes: ["userId"] })
+        if (!blog) throw new AppError(400, "Blog not found")
+        if (blog.userId === userId) throw new AppError(400, "You can't review for your own blog")
+        return await Review.create({ userId, ...data })
+    }
+
+    public updateReview = async (id: number, userId: number, data: ReviewModel) => {
+        this.isPropertyNaN(id, "review")
+        const review = await Review.findByPk(id, { attributes: ["userId"] })
+        if (!review) throw new AppError(400, "Review not found")
+        if (review.userId !== userId) throw new AppError(400, "You can only update your own review")
+        if (!data.content) throw new AppError(400, "Review content must be provided")
+        const updated = await Review.update(data,
+            {
+                where: { id, userId },
+                returning: ["content"],
+                // raw: true
+            }
+        )
+        return updated[1][0]
     }
 
     private deleteFileIfExists = (path: string | "") => {
