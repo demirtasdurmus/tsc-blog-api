@@ -1,7 +1,7 @@
 import { Category } from "../models/db"
 
 
-export default class UserService {
+export default class CategoryService {
     constructor() { }
 
     public getCategories = async () => {

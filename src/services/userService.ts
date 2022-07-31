@@ -71,18 +71,19 @@ export default class UserService {
 
     public getUserBlogs = async (userId: number, query: BlogFilter) => {
         const { limit, offset } = this.paginate(query.page, query.limit)
+        const sk = query.q ? query.q : ""
         return await Blog.findAll({
             where: {
                 userId,
                 [Op.or]: [
                     {
                         title: {
-                            [Op.iLike]: `%${query.q}%`
+                            [Op.iLike]: `%${sk}%`
                         }
                     },
                     {
                         keywords: {
-                            [Op.iLike]: `%${query.q}%`
+                            [Op.iLike]: `%${sk}%`
                         }
                     }
                 ]
@@ -181,6 +182,8 @@ export default class UserService {
     }
 
     private paginate = (clientPage: number = 1, clientLimit: number = 10, maxLimit: number = 100) => {
+        if (!clientPage) clientPage = 1;
+        if (!clientLimit) clientLimit = 10;
         let limit = +clientLimit < +maxLimit ? clientLimit : +maxLimit;
         let offset = (+clientPage - 1) * +limit;
         return { limit, offset }

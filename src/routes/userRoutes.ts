@@ -10,7 +10,7 @@ import {
     createReview,
     updateReview
 } from "../controllers/userControllers"
-import authorizeOnly from "../controllers/athorizeOnly";
+import authorizeOnly from "../middleware/athorizeOnly"
 import uploadSingleFile from "../middleware/uploadSingleFile"
 import resizeSignleImage from "../middleware/resizeSingleImage"
 const router = Router()
