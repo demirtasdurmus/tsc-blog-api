@@ -105,6 +105,35 @@ export default class UserService {
         return await Blog.create({ userId, image, ...data })
     }
 
+    public updateBlog = async (id: number, userId: number, protocol: string, host: string, data: BlogData, file?: File) => {
+        const hostName = protocol + '://' + host
+        let image = "";
+        if (file) {
+            image = hostName + '/' + file.filepath;
+            let oldPath: string = "";
+            if (data.oldImage) {
+                oldPath = `./images/${data.oldImage.slice(hostName.length + 1)}`;
+            }
+            // this.deleteFileIfExists(oldPath)
+        }
+        console.log("***", data)
+        const newValues = { image, ...data }
+        console.log("---", newValues)
+        Object.keys(newValues).forEach((key: string) => {
+            if (!newValues[key as keyof BlogData]) {
+                delete newValues[key as keyof BlogData];
+            }
+        });
+        const blog = await Blog.update(newValues,
+            {
+                where: { id, userId },
+                returning: true,
+                // raw: true
+            }
+        )
+        return blog[1][0].toJSON()
+    }
+
     private deleteFileIfExists = (path: string | "") => {
         if (path) {
             fs.access(path, function (err: any) {

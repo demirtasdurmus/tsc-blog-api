@@ -120,10 +120,12 @@ export interface BlogFilter {
     q?: string;
 }
 export interface BlogData {
+    id?: number
     title: string;
     keywords: string;
     summary?: string;
     content: string;
+    oldImage?: string;
     image?: string;
     categoryId: number
 }
