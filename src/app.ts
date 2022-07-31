@@ -18,6 +18,7 @@ app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cookieParser());
 app.use(compression());
 app.use(express.json());
+// app.use(express.urlencoded({ extended: true, type: "multipart/form-data", limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../", "images")));
 

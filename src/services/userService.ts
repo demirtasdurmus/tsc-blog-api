@@ -114,11 +114,10 @@ export default class UserService {
             if (data.oldImage) {
                 oldPath = `./images/${data.oldImage.slice(hostName.length + 1)}`;
             }
-            // this.deleteFileIfExists(oldPath)
+            this.deleteFileIfExists(oldPath)
         }
-        console.log("***", data)
         const newValues = { image, ...data }
-        console.log("---", newValues)
+        // console.log("---", newValues)
         Object.keys(newValues).forEach((key: string) => {
             if (!newValues[key as keyof BlogData]) {
                 delete newValues[key as keyof BlogData];
@@ -132,6 +131,14 @@ export default class UserService {
             }
         )
         return blog[1][0].toJSON()
+    }
+
+    public deleteBlog = async (id: number, userId: number) => {
+        await Blog.update(
+            {
+                blogStatus: "passive"
+            }, { where: { id, userId } })
+        return ""
     }
 
     private deleteFileIfExists = (path: string | "") => {

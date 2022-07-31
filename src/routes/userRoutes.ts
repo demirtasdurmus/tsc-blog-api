@@ -28,7 +28,11 @@ router
         uploadSingleFile("blogImage", "memory"),
         resizeSignleImage("blogImage", process.env.BLOG_IMAGES_DIR, 400, 400),
         createBlog)
-    .patch("/blogs/:id", authorizeOnly("author", "admin"), updateBlog)
+    .patch("/blogs/:id",
+        authorizeOnly("author", "admin"),
+        uploadSingleFile("blogImage", "memory"),
+        resizeSignleImage("blogImage", process.env.BLOG_IMAGES_DIR, 400, 400),
+        updateBlog)
     .delete("/blogs/:id", authorizeOnly("author", "admin"), deleteBlog)
 
 

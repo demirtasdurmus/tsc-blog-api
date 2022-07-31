@@ -30,12 +30,11 @@ export const createBlog: RequestHandler = catchAsync(async (req, res, next) => {
 })
 
 export const updateBlog: RequestHandler = catchAsync(async (req, res, next) => {
-    console.log("-----------------------------", req.body)
     const data = await userService.updateBlog(+req.params.id, req.userId!, req.protocol, req.get('host')!, req.body, req.file)
     return res.status(200).send({ status: "success", data })
 })
 
 export const deleteBlog: RequestHandler = catchAsync(async (req, res, next) => {
-    const data = await userService.updatePassword(req.userId!, req.body)
+    const data = await userService.deleteBlog(+req.params.id, req.userId!)
     return res.status(200).send({ status: "success", data })
 })

@@ -1,7 +1,6 @@
 import slugify from 'slugify';
 import { DataTypes } from 'sequelize';
 import db from "../index";
-import AppError from "../../utils/appError";
 import { BlogModel } from '../../interfaces';
 
 
@@ -21,7 +20,7 @@ const Blog = db.define<BlogModel>('blog',
             }
         },
         slug: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(150),
             allowNull: true,
         },
         keywords: {
