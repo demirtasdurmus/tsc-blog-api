@@ -92,7 +92,7 @@ export default class UserService {
     }
 
     public getUserBlogById = async (userId: number, id: number) => {
-        if (isNaN(id)) throw new AppError(400, "Invalid Blog Id")
+        this.isPropertyNaN(id, "blog")
         return await Blog.findOne({ where: { id, userId } })
     }
 
@@ -106,6 +106,7 @@ export default class UserService {
     }
 
     public updateBlog = async (id: number, userId: number, protocol: string, host: string, data: BlogData, file?: File) => {
+        this.isPropertyNaN(id, "blog")
         const hostName = protocol + '://' + host
         let image = "";
         if (file) {
@@ -134,6 +135,7 @@ export default class UserService {
     }
 
     public deleteBlog = async (id: number, userId: number) => {
+        this.isPropertyNaN(id, "blog")
         await Blog.update(
             {
                 blogStatus: "passive"
@@ -156,5 +158,10 @@ export default class UserService {
         let limit = +clientLimit < +maxLimit ? clientLimit : +maxLimit;
         let offset = (+clientPage - 1) * +limit;
         return { limit, offset }
+    }
+
+    private isPropertyNaN = (prop: any, name: string) => {
+        if (isNaN(prop)) throw new AppError(400, `Invalid ${name} id`)
+        return
     }
 }
