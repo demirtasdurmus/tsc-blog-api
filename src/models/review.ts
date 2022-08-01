@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import db from "../index";
-import { ReviewModel } from '../../interfaces';
+import db from ".";
+import { ReviewModel } from '../interfaces';
 
 
 const Review = db.define<ReviewModel>('review',

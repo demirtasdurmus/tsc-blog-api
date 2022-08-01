@@ -3,7 +3,7 @@ import AppError from "../utils/appError"
 import Cookie from "../utils/cookie"
 import Email from "../utils/email"
 import JWT from "../utils/jwt"
-import { User, Role } from "../models/db"
+import { User, Role } from "../models"
 import { UserModel, LoginData } from "../interfaces"
 import { API_URL } from "../config"
 

@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 import { DataTypes } from 'sequelize';
-import db from "../index";
-import { BlogModel } from '../../interfaces';
+import db from ".";
+import { BlogModel } from '../interfaces';
 
 
 const Blog = db.define<BlogModel>('blog',

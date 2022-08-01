@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import db from "../index";
-import { CategoryModel } from '../../interfaces';
+import db from ".";
+import { CategoryModel } from '../interfaces';
 
 
 const Category = db.define<CategoryModel>('category',

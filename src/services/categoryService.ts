@@ -1,4 +1,4 @@
-import { Category } from "../models/db"
+import { Category } from "../models"
 
 
 export default class CategoryService {

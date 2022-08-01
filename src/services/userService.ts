@@ -1,7 +1,7 @@
 import fs from "fs"
 import bcrypt from "bcrypt"
 import { Op } from "sequelize"
-import { User, Blog, Review, Category } from "../models/db"
+import { User, Blog, Review, Category } from "../models"
 import AppError from "../utils/appError"
 import {
     ProfileData,

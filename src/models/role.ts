@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import db from "../index";
-import { RoleModel } from '../../interfaces';
+import db from ".";
+import { RoleModel } from '../interfaces';
 
 const Role = db.define<RoleModel>('role',
     {

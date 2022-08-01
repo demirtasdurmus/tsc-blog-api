@@ -1,6 +1,6 @@
 import { Op } from "sequelize"
 import AppError from "../utils/appError"
-import { Blog, Review, User } from "../models/db"
+import { Blog, Review, User } from "../models"
 import { BlogFilter } from "../interfaces"
 
 
