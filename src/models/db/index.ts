@@ -8,7 +8,10 @@ Role.hasMany(User)
 User.belongsTo(Role)
 
 Blog.belongsTo(User, { as: "author" })
+User.hasMany(Blog, { as: "blogs", foreignKey: "authorId" })
+
 Review.belongsTo(User, { as: "owner" })
+User.hasMany(Review, { as: "reviews", foreignKey: "ownerId" })
 
 Category.hasMany(Blog)
 Blog.belongsTo(Category)
