@@ -29,8 +29,9 @@ export default class BlogService {
             attributes: ["id", "title", "summary", "image", "length", "createdAt"],
             include: {
                 model: User,
+                as: "author",
                 required: true,
-                attributes: ["firstName", "lastName"]
+                attributes: ["id", "firstName", "lastName", "profileImage"]
             },
             limit,
             offset
@@ -42,22 +43,24 @@ export default class BlogService {
         return await Blog.findOne(
             {
                 where: { id, blogStatus: "active" },
-                attributes: { exclude: ["blogStatus", "updatedAt", "userId", "categoryId"] },
+                attributes: { exclude: ["blogStatus", "updatedAt", "authorId", "categoryId"] },
                 include: [
                     {
                         model: User,
+                        as: "author",
                         required: true,
-                        attributes: ["id", "firstName", "lastName", "bio", "profileImage"]
+                        attributes: ["id", "firstName", "lastName", "profileImage", "bio"]
                     },
                     {
                         model: Review,
-                        required: true,
+                        required: false,
                         attributes: ["content", "response", "createdAt"],
                         include: [
                             {
                                 model: User,
+                                as: "owner",
                                 required: true,
-                                attributes: ["id", "firstName", "lastName"]
+                                attributes: ["firstName", "lastName"]
                             }
                         ]
                     },
@@ -72,8 +75,9 @@ export default class BlogService {
             attributes: ["id", "title", "summary", "image", "length", "createdAt"],
             include: {
                 model: User,
+                as: "author",
                 required: true,
-                attributes: ["firstName", "lastName"]
+                attributes: ["id", "firstName", "lastName", "profileImage"]
             },
             limit,
             offset

@@ -36,7 +36,7 @@ export interface ReviewModel extends Model<InferAttributes<ReviewModel>, InferCr
     verifyStatus?: "verified" | "pending" | "rejected";
     feedback?: string;
     response?: "positive" | "negative";
-    userId?: number;
+    ownerId?: number;
     blogId?: number;
 }
 export interface CategoryModel extends Model<InferAttributes<CategoryModel>, InferCreationAttributes<CategoryModel>> {
@@ -55,7 +55,7 @@ export interface BlogModel extends Model<InferAttributes<BlogModel>, InferCreati
     blogStatus?: "active" | "passive";
     length?: number;
     clapCount?: number;
-    userId?: number;
+    authorId?: number;
     categoryId?: number;
 }
 // other interfaces

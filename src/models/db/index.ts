@@ -7,16 +7,13 @@ import User from "./user";
 Role.hasMany(User)
 User.belongsTo(Role)
 
-User.hasMany(Blog)
-Blog.belongsTo(User)
+Blog.belongsTo(User, { as: "author" })
+Review.belongsTo(User, { as: "owner" })
 
 Category.hasMany(Blog)
 Blog.belongsTo(Category)
 
 Blog.hasMany(Review)
 Review.belongsTo(Blog)
-
-User.hasMany(Review)
-Review.belongsTo(User)
 
 export { Blog, Category, Review, Role, User }

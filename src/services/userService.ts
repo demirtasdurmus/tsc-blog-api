@@ -1,7 +1,7 @@
 import fs from "fs"
 import bcrypt from "bcrypt"
 import { Op } from "sequelize"
-import { User, Blog, Review } from "../models/db"
+import { User, Blog, Review, Category } from "../models/db"
 import AppError from "../utils/appError"
 import {
     ProfileData,
@@ -69,12 +69,12 @@ export default class UserService {
         return "";
     }
 
-    public getUserBlogs = async (userId: number, query: BlogFilter) => {
+    public getUserBlogs = async (authorId: number, query: BlogFilter) => {
         const { limit, offset } = this.paginate(query.page, query.limit)
         const sk = query.q ? query.q : ""
         return await Blog.findAll({
             where: {
-                userId,
+                authorId,
                 [Op.or]: [
                     {
                         title: {
@@ -88,26 +88,43 @@ export default class UserService {
                     }
                 ]
             },
+            attributes: { exclude: ["authorId", "slug", "categoryId", "content"] },
+            include: [
+                {
+                    model: Category,
+                    required: true,
+                    attributes: ["name"]
+                }
+            ],
             limit,
             offset
         })
     }
 
-    public getUserBlogById = async (userId: number, id: number) => {
+    public getUserBlogById = async (authorId: number, id: number) => {
         this.isPropertyNaN(id, "blog")
-        return await Blog.findOne({ where: { id, userId } })
+        return await Blog.findOne({
+            where: { id, authorId },
+            include: [
+                {
+                    model: Category,
+                    required: true,
+                    attributes: ["name"]
+                }
+            ]
+        })
     }
 
-    public createBlog = async (userId: number, protocol: string, host: string, data: BlogData, file?: File) => {
+    public createBlog = async (authorId: number, protocol: string, host: string, data: BlogData, file?: File) => {
         const hostName = protocol + '://' + host
         let image = "";
         if (file) {
             image = hostName + '/' + file.filepath
         }
-        return await Blog.create({ userId, image, ...data })
+        return await Blog.create({ authorId, image, ...data })
     }
 
-    public updateBlog = async (id: number, userId: number, protocol: string, host: string, data: BlogData, file?: File) => {
+    public updateBlog = async (id: number, authorId: number, protocol: string, host: string, data: BlogData, file?: File) => {
         this.isPropertyNaN(id, "blog")
         const hostName = protocol + '://' + host
         let image = "";
@@ -128,7 +145,7 @@ export default class UserService {
         });
         const blog = await Blog.update(newValues,
             {
-                where: { id, userId },
+                where: { id, authorId },
                 returning: true,
                 // raw: true
             }
@@ -136,17 +153,20 @@ export default class UserService {
         return blog[1][0]
     }
 
-    public deleteBlog = async (id: number, userId: number) => {
+    public deleteBlog = async (id: number, authorId: number) => {
         this.isPropertyNaN(id, "blog")
         await Blog.update(
             {
                 blogStatus: "passive"
-            }, { where: { id, userId } })
+            }, { where: { id, authorId } })
         return ""
     }
 
-    public clapBlog = async (id: number) => {
+    public clapBlog = async (id: number, userId: number) => {
         this.isPropertyNaN(id, "blog")
+        const blog = await Blog.findByPk(id, { attributes: ["authorId"] })
+        if (!blog) throw new AppError(400, "Blog not found")
+        if (blog.authorId === userId) throw new AppError(400, "You can't clap your own blog")
         await Blog.increment('clapCount', { by: 1, where: { id } })
         return ""
     }
@@ -154,21 +174,21 @@ export default class UserService {
     public createReview = async (userId: number, data: ReviewModel) => {
         if (!data.blogId) throw new AppError(400, "Blog id must be provided")
         this.isPropertyNaN(data.blogId, "blog")
-        const blog = await Blog.findByPk(data.blogId, { attributes: ["userId"] })
+        const blog = await Blog.findByPk(data.blogId, { attributes: ["authorId"] })
         if (!blog) throw new AppError(400, "Blog not found")
-        if (blog.userId === userId) throw new AppError(400, "You can't review for your own blog")
-        return await Review.create({ userId, ...data })
+        if (blog.authorId === userId) throw new AppError(400, "You can't review for your own blog")
+        return await Review.create({ ownerId: userId, ...data })
     }
 
     public updateReview = async (id: number, userId: number, data: ReviewModel) => {
         this.isPropertyNaN(id, "review")
-        const review = await Review.findByPk(id, { attributes: ["userId"] })
+        const review = await Review.findByPk(id, { attributes: ["ownerId"] })
         if (!review) throw new AppError(400, "Review not found")
-        if (review.userId !== userId) throw new AppError(400, "You can only update your own review")
+        if (review.ownerId !== userId) throw new AppError(400, "You can only update your own review")
         if (!data.content) throw new AppError(400, "Review content must be provided")
         const updated = await Review.update(data,
             {
-                where: { id, userId },
+                where: { id, ownerId: userId },
                 returning: ["content"],
                 // raw: true
             }

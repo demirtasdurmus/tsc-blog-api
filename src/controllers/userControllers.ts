@@ -40,7 +40,7 @@ export const deleteBlog: RequestHandler = catchAsync(async (req, res, next) => {
 })
 
 export const clapBlog: RequestHandler = catchAsync(async (req, res, next) => {
-    const data = await userService.clapBlog(+req.params.id)
+    const data = await userService.clapBlog(+req.params.id, req.userId!)
     return res.status(200).send({ status: "success", data })
 })
 
