@@ -3,6 +3,7 @@ import { Table, Model, Column, DataType, IsEmail, Length, Unique } from 'sequeli
 @Table({
     timestamps: true,
 })
+
 export class User extends Model {
     @Length({ msg: "First name must be between 1 and 50 characters long", max: 50, min: 1 })
     @Column({
