@@ -8,7 +8,6 @@ const db = new Sequelize({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     logging: false,
-    // models: [User],
     define: {
         underscored: true, // use snake_case for all fields in the database
         // freezeTableName: true, //stop the auto-pluralization performed by Sequelize
