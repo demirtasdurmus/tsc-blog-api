@@ -15,7 +15,7 @@ db.sync({ force: false })
     .catch((err) => console.log(`Unable to sync ${db.config.database}:`, err))
 
 const server = app.listen(PORT, () => {
-    console.log(`Server is awake onn port ${PORT}:${process.env.NODE_ENV}`);
+    console.log(`Server is awake on port ${PORT}:${process.env.NODE_ENV}`);
 })
 
 ErrorHandler.initializeUnhandledRejection(server)
