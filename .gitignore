@@ -12,3 +12,7 @@
 
 #config
 .vscode
+
+# OS
+
+.DS_Store
