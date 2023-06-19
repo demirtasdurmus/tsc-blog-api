@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Node.js",
+    "keywords": "Node.js, event-driven architecture"
+  },
+  {
+    "name": "React",
+    "keywords": "React.js, Hooks, virtual DOM"
+  },
+  {
+    "name": "Java",
+    "keywords": "Spring Boot, Desktop Apps, Games"
+  }
+]

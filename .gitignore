@@ -1,8 +1,8 @@
 # dependencies
 /node_modules
-/devData
-/images/profile
-/images/blog
+/devData!
+/images/profile!
+/images/blog!
 
 # dist
 /dist
